@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 class Vectorize:
 
     def bert_encoding(text):
-        model = SentenceTransformer('distilbert-base-nli-mean-tokens')
+        model = SentenceTransformer('roberta-large-mnli')
         doc_embedding = model.encode(text)
 
         return doc_embedding
