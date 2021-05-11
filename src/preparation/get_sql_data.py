@@ -40,8 +40,3 @@ def get_articles(source, output_folder):
     with open(output_folder+f"{source}.json", "w") as f:
         f.write(j)
 
-get_articles("HindustanTimes", "data/")
-get_articles("toi", "data/")
-get_articles("ie", "data/")
-get_articles("hindu", "data/")
-
