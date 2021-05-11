@@ -1,30 +1,47 @@
 import json
 import collections
-import mysql.connector import connect, Error
+import psycopg2
 
 
-def get_data(host, dbname, user, pwd, table, output_file):
+def run(stmt):
 
-    conn_string = f"host={host} dbname={dbname} user={user} password={pwd}"
-    conn = connect(conn_string)
-    cursor = conn.cursor()
-
-    cursor.execute(f"SELECT * FROM {table}")
-    rows = cursor.fetchall()
+    conn =  psycopg2.connect(database='news_app', user='postgres', password='pw1234', host='127.0.0.1')
+    cur = conn.cursor()
+    cur.execute(stmt)
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
 
     objects_list = []
+
     for row in rows:
         d = collections.OrderedDict()
-        d['id'] = row[0]
-        d['source'] = row[1]
-        d['headline'] = row[2]
-        d['link'] = row[3]
-        d['cat'] = row[4]
-        d['content'] = row[5]
+        d["id"] = row[0]
+        d["source"] = row[1]
+        d["headline"] = row[2]
+        d["link"] = row[3]
+        d["category"] = row[4]
+        d["content"] = row[5]
         objects_list.append(d)
-    j = json.dumps(objects_list)
-    with open('output_file', 'w') as f:
+
+
+
+    return objects_list
+
+def get_articles(source, output_folder):   
+
+    stmt = f"SELECT * FROM articles WHERE source='{source}';"
+    try:
+        result = run(stmt)
+    except psycopg2.Error as e:
+        print(e)
+
+    j = json.dumps(result)
+    with open(output_folder+f"{source}.json", "w") as f:
         f.write(j)
 
-    conn.close ()
+get_articles("HindustanTimes", "data/")
+get_articles("toi", "data/")
+get_articles("ie", "data/")
+get_articles("hindu", "data/")
 
