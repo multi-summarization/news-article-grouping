@@ -5,6 +5,9 @@ from sklearn.preprocessing import Normalizer
 from sklearn.decomposition import TruncatedSVD
 from sklearn.pipeline import make_pipeline
 
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
 
 def vectorize_texts_tf_idf(data_set, ngram, using_stemming=True):
 
